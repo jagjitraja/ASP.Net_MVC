@@ -20,11 +20,11 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.CategoryName)
+            @Html.DisplayFor(modelItem => item.CategoryName) 
         </td>
         <td>
-            @Html.ActionLink("Edit", "EditCategory", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "DeleteCategory", new { id=item.ID })
+            @Html.ActionLink("Edit", "EditCategory", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "DeleteCategory", new { id=item.Id })
         </td>
     </tr>
 }

@@ -7,23 +7,24 @@ using MyShop.DataAccess.InMemory;
 using MyShop.Core.Models;
 using MyShop.Core.ViewModels;
 
-namespace MyShop.WebUI.Controllers
+namespace MyShop.Core.Contracts
 {
     public class ProductManagerController : Controller
     {
-        ProductRepository productRepository;
-        ProductCategoryRepository productCategoryRepository;
+        IStorageRepository<Product> productRepository;
+        IStorageRepository<ProductCategory> productCategoryRepository;
 
-        public ProductManagerController()
+        public ProductManagerController(IStorageRepository<Product> productRepository, 
+            IStorageRepository<ProductCategory> categoryRepository)
         {
-            productRepository = new ProductRepository();
-            productCategoryRepository = new ProductCategoryRepository();
+            this.productRepository = productRepository;
+            this.productCategoryRepository = categoryRepository;
         }
 
         // GET: ProductManager
         public ActionResult Index()
         {
-            List<Product> products = productRepository.ProductListQuery().ToList(); 
+            List<Product> products = productRepository.GetItems().ToList(); 
 
             return View(products);
         }
@@ -34,7 +35,7 @@ namespace MyShop.WebUI.Controllers
             ProductViewModel productViewModel = new ProductViewModel();
 
             productViewModel.Product = new Product();
-            productViewModel.ProductCategories = productCategoryRepository.CategoryListQuery();
+            productViewModel.ProductCategories = productCategoryRepository.GetItems();
             return View(productViewModel);
 
         }
@@ -47,7 +48,7 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
-                productRepository.InsertProduct(product);
+                productRepository.InsertItem(product);
                 productRepository.Commit();
                 return RedirectToAction("Index");
             }
@@ -56,14 +57,14 @@ namespace MyShop.WebUI.Controllers
 
         public ActionResult EditProduct(string ID)
         {
-            Product prodToEdit = productRepository.Find(ID);
+            Product prodToEdit = productRepository.FindItem(ID);
 
             if (prodToEdit != null)
             {
 
                 ProductViewModel productViewModel = new ProductViewModel();
                 productViewModel.Product = prodToEdit;
-                productViewModel.ProductCategories = productCategoryRepository.CategoryListQuery();
+                productViewModel.ProductCategories = productCategoryRepository.GetItems();
 
                 return View(productViewModel);
             }
@@ -76,7 +77,7 @@ namespace MyShop.WebUI.Controllers
         [HttpPost]
         public ActionResult EditProduct(Product newProduct, string ID)
         {
-            Product prodToEdit = productRepository.Find(ID);
+            Product prodToEdit = productRepository.FindItem(ID);
 
             if (prodToEdit != null)
             {
@@ -105,7 +106,7 @@ namespace MyShop.WebUI.Controllers
 
         public ActionResult DeleteProduct(string id)
         {
-            Product prodToDelete = productRepository.Find(id);
+            Product prodToDelete = productRepository.FindItem(id);
 
             if (prodToDelete != null)
             {
@@ -121,11 +122,11 @@ namespace MyShop.WebUI.Controllers
         [ActionName("DeleteProduct")]
         public ActionResult ConfirmDeleteProduct(string id)
         {
-            Product prodToDelete = productRepository.Find(id);
+            Product prodToDelete = productRepository.FindItem(id);
 
             if (prodToDelete != null)
             {
-                productRepository.DeleteProduct(prodToDelete);
+                productRepository.Delete(prodToDelete);
                 productRepository.Commit();
                 return RedirectToAction("Index");
             }
