@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.DataAccess.InMemory
 {
-    class ProductRepository
+    public class ProductRepository
     {
         ObjectCache cache = MemoryCache.Default;
         List<Product> products;
@@ -18,7 +18,7 @@ namespace MyShop.DataAccess.InMemory
             products = cache["PRODUCTS"] as List<Product>;
             if (products == null)
             {
-                products = new List<Product>;
+                products = new List<Product>();
             }
         }
 
@@ -57,6 +57,13 @@ namespace MyShop.DataAccess.InMemory
             {
                 throw new Exception("Product Not Found");
             }
+        }
+
+        public Product Find(string iD)
+        {
+            Product foundProduct = products.Find(p => p.ID == iD);
+
+            return foundProduct;
         }
 
         public IQueryable<Product> ProductListQuery()
