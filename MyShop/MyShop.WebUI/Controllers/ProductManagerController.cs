@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using MyShop.DataAccess.InMemory;
 using MyShop.Core.Models;
 using MyShop.Core.ViewModels;
+using System.IO;
 
 namespace MyShop.Core.Contracts
 {
@@ -24,8 +25,8 @@ namespace MyShop.Core.Contracts
         // GET: ProductManager
         public ActionResult Index()
         {
-            List<Product> products = productRepository.GetItems().ToList(); 
-
+            List<Product> products = productRepository.GetItems().ToList();
+            System.Diagnostics.Debug.WriteLine("--------\n---\n-\n-\n-\n--n\n-\n-\n-\n-\n-\n-\n---------"+products.ToString());
             return View(products);
         }
 
@@ -40,7 +41,7 @@ namespace MyShop.Core.Contracts
 
         }
         [HttpPost]
-        public ActionResult AddNewProduct(Product product)
+        public ActionResult AddNewProduct(Product product, HttpPostedFileBase file)
         {
             if (!ModelState.IsValid)
             {
@@ -48,6 +49,19 @@ namespace MyShop.Core.Contracts
             }
             else
             {
+                if (file != null)
+                {
+                    System.Diagnostics.Debug.WriteLine((file == null) + "   " + product.Image);
+                    product.Image = product.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("//Content//ProductImages//") + product.Image);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("[][][][]]][][][][][][][][][][][][][][[][");
+                }
+
+
+                System.Diagnostics.Debug.WriteLine(product.ToString());
                 productRepository.InsertItem(product);
                 productRepository.Commit();
                 return RedirectToAction("Index");
@@ -75,7 +89,7 @@ namespace MyShop.Core.Contracts
         }
 
         [HttpPost]
-        public ActionResult EditProduct(Product newProduct, string ID)
+        public ActionResult EditProduct(Product newProduct, string ID, HttpPostedFileBase file)
         {
             Product prodToEdit = productRepository.FindItem(ID);
 
@@ -87,9 +101,14 @@ namespace MyShop.Core.Contracts
                 }
                 else
                 {
+                    if (file != null)
+                    {
+                        prodToEdit.Image = newProduct.Id + Path.GetExtension(file.FileName);
+                        file.SaveAs(Server.MapPath("//Content//ProductImages//") + prodToEdit.Image);
+                    }
+                    
                     prodToEdit.Category = newProduct.Category;
                     prodToEdit.Description = newProduct.Description;
-                    prodToEdit.Image = newProduct.Image;
                     prodToEdit.Name = newProduct.Name;
                     prodToEdit.Price = newProduct.Price;
 

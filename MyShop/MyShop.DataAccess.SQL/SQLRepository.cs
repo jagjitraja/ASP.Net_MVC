@@ -48,7 +48,6 @@ namespace MyShop.DataAccess.SQL
 
         public void InsertItem(T t)
         {
-            System.Diagnostics.Debug.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             dbset.Add(t);
         }
 

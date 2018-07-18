@@ -22,5 +22,10 @@ namespace MyShop.Core.Models
         public string Category { get; set; }
         public string Image { get; set; }
 
+        public string ToString()
+        {
+            return "Name: "+Name + "\nDescription: " + Description + "\nPrice: " + Price + "\nCategory: " + Category + "\nImage: " + Image + "\n";
+        }
+
     }
 }
