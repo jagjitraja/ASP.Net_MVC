@@ -12,7 +12,7 @@ namespace MyShop.DataAccess.SQL
     {
         
 
-        //Casue the DbContext class to connect with the Database declared in the Web.Config file
+        //Cause the DbContext class to connect with the Database declared in the Web.Config file
         public DataContext()
             : base("DefaultConnection")
         {
@@ -21,5 +21,7 @@ namespace MyShop.DataAccess.SQL
 
         public DbSet<Product> DBProducts { get; set; }
         public DbSet<ProductCategory> DBProductCategory { get; set; }
+        public DbSet<Basket> DBBasket { get; set; }
+        public DbSet<BasketItem> DBBasketItems { get; set; }
     }
 }
