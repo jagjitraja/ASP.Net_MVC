@@ -15,6 +15,10 @@ namespace MyShop.WebUI.Controllers
         IStorageRepository<Product> productRepository;
         IStorageRepository<ProductCategory> categoryRepository;
 
+        public HomeController()
+        {
+
+        }
         public HomeController(IStorageRepository<Product> products, IStorageRepository<ProductCategory> categories)
         {
             this.productRepository = products;

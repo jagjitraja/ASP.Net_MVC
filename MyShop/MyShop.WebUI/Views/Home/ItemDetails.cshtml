@@ -15,7 +15,8 @@
         <div class="col-md-7" style="height:450px;">
             <h5>@Model.Description</h5>
             <h3>@Model.Price</h3>
-            <a class="btn btn-danger">Add to Cart</a>
+            <div class="col-md-12">
+            <a class="btn btn-danger" href="@Url.Action("AddToBasket","Basket", new { Id = Model.Id })">Add to Cart</a></div>
         </div>
     </div>
 </div>

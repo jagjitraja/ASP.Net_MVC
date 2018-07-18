@@ -74,6 +74,7 @@ namespace MyShop.Services
 
             BasketItem basketItem = basket.BasketItems.FirstOrDefault(i => i.ProductId == productId);
 
+            System.Diagnostics.Debug.WriteLine((basketItem==null)+"[][][][][][][][][][][][][][][][][][[]");
             //Item is not in basket yet and is the first of its kind to be added in basket
             if (basketItem == null)
             {
@@ -81,6 +82,11 @@ namespace MyShop.Services
                 basketItem.BasketId = basket.Id;
                 basketItem.ProductId = productId;
                 basketItem.Quantity = 1;
+
+
+                System.Diagnostics.Debug.WriteLine((basketItem.Id)+"\n\n\n"+(basketItem.BasketId==basket.Id) + "****/*/*/*/*//*/*/*/**/*/*/*/*/*/*/*/*");
+
+                basket.BasketItems.Add(basketItem);
             }
             else
             {
@@ -95,9 +101,13 @@ namespace MyShop.Services
 
             Basket basket = GetBasket(httpContext, true);
 
-            BasketItem basketItem = basket.BasketItems.FirstOrDefault(i => i.ProductId == basketItemId);
 
-            //Item is not in basket yet and is the first of its kind to be added in basket
+            foreach(var item in basket.BasketItems)
+            {
+                System.Diagnostics.Debug.WriteLine(item.Id+" \n\n\n "+ item.ProductId+" \n\n\n "+basketItemId);
+            }
+            BasketItem basketItem = basket.BasketItems.FirstOrDefault(i => i.Id == basketItemId);
+
             if (basketItem == null)
             {
                 throw new Exception("Item not in Basket");
