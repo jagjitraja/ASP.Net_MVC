@@ -1,5 +1,6 @@
 ﻿using MyShop.Core.Contracts;
 using MyShop.Core.Models;
+using MyShop.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Web;
 
 namespace MyShop.Services
 {
-    public class BasketService
+    public class BasketService : IBasketService
     {
         IStorageRepository<Product> productRepository;
         IStorageRepository<Basket> basketRepository;
@@ -125,8 +126,63 @@ namespace MyShop.Services
             {
                 basketItem.Quantity = basketItem.Quantity - 1;
             }
-
             basketRepository.Commit();
         }
+
+        public List<BasketItemViewModel> GetBasketItems(HttpContextBase httpContext)
+        {
+            Basket basket = GetBasket(httpContext, false);
+
+            if (basket != null)
+            {
+                var result = (from b in basket.BasketItems
+                              join p in productRepository.GetItems() on b.ProductId equals p.Id
+
+                              select new BasketItemViewModel()
+                              {
+                                  Id = b.Id,
+                                  Quantity = b.Quantity,
+                                  Name = p.Name,
+                                  ImageURL = p.Image,
+                                  Price = p.Price
+                              }).ToList();
+                return result;
+            }
+            else
+            {
+                return new List<BasketItemViewModel>();
+            }
+            
+        }
+
+        public BasketSummaryViewModel GetBasketSummary(HttpContextBase httpContext)
+        {
+            Basket basket = GetBasket(httpContext,false);
+
+            BasketSummaryViewModel basketSummaryViewModel = new BasketSummaryViewModel(0,0);
+            if (basket != null)
+            {
+                int? totalItemCount = (from i in basket.BasketItems
+                                       select i.Quantity).Sum();
+
+                //allows it to store null
+                decimal? basketTotalValue = (from i in basket.BasketItems
+                                             join p in productRepository.GetItems() on
+                                             i.ProductId equals p.Id
+                                             select i.Quantity * p.Price).Sum();
+
+
+                //check if null, if null then assign it to 0
+               
+                basketSummaryViewModel.TotalBasketValue = basketTotalValue ?? 0;
+                basketSummaryViewModel.TotalItemCount = totalItemCount ?? 0;
+                
+            }
+
+            return basketSummaryViewModel;
+
+        }
+
+
     }
 }
