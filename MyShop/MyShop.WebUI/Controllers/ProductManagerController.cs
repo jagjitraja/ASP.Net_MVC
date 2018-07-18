@@ -126,7 +126,7 @@ namespace MyShop.Core.Contracts
 
             if (prodToDelete != null)
             {
-                productRepository.Delete(prodToDelete);
+                productRepository.Delete(id);
                 productRepository.Commit();
                 return RedirectToAction("Index");
             }

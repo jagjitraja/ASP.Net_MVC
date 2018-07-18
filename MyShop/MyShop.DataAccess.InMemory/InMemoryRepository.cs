@@ -33,6 +33,8 @@ namespace MyShop.DataAccess.InMemory
 
         public void InsertItem(T t)
         {
+
+            System.Diagnostics.Debug.WriteLine("IN IN MEMORY REPOSITORY");
             items.Add(t);
         }
 
@@ -61,9 +63,9 @@ namespace MyShop.DataAccess.InMemory
                 throw new Exception("Item Not Found");
             }
         }
-        public void Delete(T t)
+        public void Delete(string id)
         {
-            T TtoDelete = items.Find(i => i.Id == t.Id);
+            T TtoDelete = items.Find(i => i.Id == id);
             if (TtoDelete != null)
             {
                 items.Remove(TtoDelete);

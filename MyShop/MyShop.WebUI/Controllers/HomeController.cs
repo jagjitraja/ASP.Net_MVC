@@ -10,6 +10,8 @@ namespace MyShop.WebUI.Controllers
     {
         public ActionResult Index()
         {
+
+            System.Diagnostics.Debug.WriteLine("STARTING APPLICARTUION++++++++++++++++++++++++++++++++++");
             return View();
         }
 

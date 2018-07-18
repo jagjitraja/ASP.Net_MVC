@@ -40,6 +40,8 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
+
+                System.Diagnostics.Debug.WriteLine("ADDING NEW CATEGORY-----------------------------------");
                 productCategoryRepository.InsertItem(productCategory);
                 productCategoryRepository.Commit();
                 return RedirectToAction("Index");
@@ -47,9 +49,9 @@ namespace MyShop.WebUI.Controllers
 
         }
 
-        public ActionResult EditCategory(string ID)
+        public ActionResult EditCategory(string Id)
         {
-            ProductCategory categoryToEdit = productCategoryRepository.FindItem(ID);
+            ProductCategory categoryToEdit = productCategoryRepository.FindItem(Id);
 
             if (categoryToEdit != null)
             {
@@ -62,9 +64,9 @@ namespace MyShop.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditCategory(ProductCategory newProductCategory, string ID)
+        public ActionResult EditCategory(ProductCategory newProductCategory, string Id)
         {
-            ProductCategory categoryToEdit = productCategoryRepository.FindItem(ID);
+            ProductCategory categoryToEdit = productCategoryRepository.FindItem(Id);
 
             if (categoryToEdit != null)
             {
@@ -87,9 +89,9 @@ namespace MyShop.WebUI.Controllers
 
         }
 
-        public ActionResult DeleteCategory(string id)
+        public ActionResult DeleteCategory(string Id)
         {
-            ProductCategory categoryToDelete = productCategoryRepository.FindItem(id);
+            ProductCategory categoryToDelete = productCategoryRepository.FindItem(Id);
 
             if (categoryToDelete != null)
             {
@@ -103,13 +105,13 @@ namespace MyShop.WebUI.Controllers
 
         [HttpPost]
         [ActionName("DeleteCategory")]
-        public ActionResult ConfirmDeleteCategory(string id)
+        public ActionResult ConfirmDeleteCategory(string Id)
         {
-            ProductCategory categoryToDelete = productCategoryRepository.FindItem(id);
+            ProductCategory categoryToDelete = productCategoryRepository.FindItem(Id);
 
             if (categoryToDelete != null)
             {
-                productCategoryRepository.Delete(categoryToDelete);
+                productCategoryRepository.Delete(Id);
                 productCategoryRepository.Commit();
                 return RedirectToAction("Index");
             }

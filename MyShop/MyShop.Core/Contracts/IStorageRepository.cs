@@ -6,7 +6,7 @@ namespace MyShop.Core.Contracts
     public interface IStorageRepository<T> where T : BaseObjectEntity
     {
         void Commit();
-        void Delete(T t);
+        void Delete(string id);
         T FindItem(string id);
         IQueryable<T> GetItems();
         void InsertItem(T t);
